@@ -1,0 +1,3 @@
+android broadcast port = 47600
+pcServer default port = 47601
+Android portListener port = 47602

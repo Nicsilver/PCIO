@@ -1,0 +1,19 @@
+There has been a large amount of consideration consering how to handle touch events, therse a 3 lines of thinking on this issue.
+
+1. We can have mouse library in the view part of the app, then have the touch events sent to it, where it will figure out what to do. This runs into issues such as, when you want to click, a down event is fired, then some move events no matter how still the finger is, then an up. The problem is we only want click if the pointer hasnt moved, and doing this calculation with how the MouseLibrary is setup not really possible. This sets us up for 2nd like of tinking
+
+2. We can have the view/activity, handle the logic for if there has been a small enough distanced traveled from down and up events. This will work, since we can then ask the mouse library to perform the correct action, and then send it on. The issue with both of these approches are that we end up having a large view, which is not desired, we would like as much prosseccing and logic as possible to happen in the model part of the application. So the model is not dependent// on the view. 
+
+3. 3rd way is to have every event be sent down to the model with each its own method containing cordinates. This seperates all the logic and prosseccing from the view, instead having it be done in the model. The only annoying thing is this creates a fair a mount of boiler plate, as we have to have each method of each possible event, in both the presenter and the model.
+
+I have chosen to go with the 3rd method since i prefer having larger amounts of boiler plate, vs having logic in the view.
+
+
+Considerations on where to place the calculations for actions:
+
+Theres been a large consideration about where the "heavy" calculations should be, the app or the pc?
+
+
+Firstly having it on the pc. When it comes to this solution the biggest and most obvious advantage is that we offload cpu time from the the app to the pc. The downside with this solution however is that if we lose a packet, then some functionality MIGHT break, such as dragging or scrolling. With this solution we send every move done by either 1. or 2. pointer be it move down or up. This actually ends creating more cpu time for the phone, AND the pc, since it will send packets that would not be sent otherwise, like small movement packets, that arent over the threshold. 
+Another benifit of this, is that the server is left somewhat dumb, if we decide to create another client say iphone, we just have to model the packets we send in the same fashion, and the server will accept everything without and complaints.
+It is for all these reasons the calculations will be done on the app, and just have the pc do whatever it is told to do.

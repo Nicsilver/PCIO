@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PCIO</string>
+    <string name="no_server_found">No Server Found</string>
+    <string name="connect">connect</string>
+    <string name="todo">TODO</string>
+    <string name="searching">Searching</string>
+    <string name="keyboard">Keyboard</string>
+    <string name="media_keys">Media Keys</string>
+    <string name="keyboard_button">Keyboard Button</string>
+    <string name="media_keys_button">Media Keys Button</string>
+</resources>

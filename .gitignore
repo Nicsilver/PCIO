@@ -1,0 +1,32 @@
+# === Signing keys — NEVER commit ===
+*.jks
+*.jks.old
+*.keystore
+*.p12
+keystore.properties
+signing.properties
+
+# === Android / Gradle ===
+.gradle/
+build/
+captures/
+local.properties
+*.apk
+*.ap_
+*.aab
+
+# === Java / IntelliJ ===
+target/
+out/
+*.iml
+*.class
+
+# === Built server artifacts (shipped via GitHub Releases, not git) ===
+PCIO_Server/dist/
+Documents/ServerRunnables/
+Documents/PCIO.exe
+
+# === IDE / OS ===
+.idea/
+.DS_Store
+Thumbs.db
