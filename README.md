@@ -77,6 +77,12 @@ jar cfe PCIO_Server.jar dk.nicsilver.pcioServer.Main -C out .
 
 Run it with `java -jar PCIO_Server.jar`.
 
+## Privacy
+
+PCIO collects no data. It has no servers or accounts of its own and talks only to the
+companion server on your own PC, over your own network. See the
+[privacy policy](https://nicsilver.github.io/PCIO/privacy.html).
+
 ## License
 
 [MIT](LICENSE)
