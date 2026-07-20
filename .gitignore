@@ -5,6 +5,7 @@
 *.p12
 keystore.properties
 signing.properties
+try-keystore-password.ps1
 
 # === Android / Gradle ===
 .gradle/
