@@ -21,7 +21,7 @@ android {
         applicationId "dk.nicsilver.pcio"
         minSdk 24
         targetSdk 35
-        versionCode 9
+        versionCode 20
         versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -30,7 +30,8 @@ android {
     signingConfigs {
         release {
             if (keystorePropsFile.exists()) {
-                storeFile file(keystoreProps['storeFile'])
+                // Resolve against PCIO_App/ (rootProject) so ../Documents/... matches keystore.properties.
+                storeFile rootProject.file(keystoreProps['storeFile'])
                 storePassword keystoreProps['storePassword']
                 keyAlias keystoreProps['keyAlias']
                 keyPassword keystoreProps['keyPassword']
