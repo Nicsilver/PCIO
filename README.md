@@ -1,5 +1,7 @@
 # PCIO
 
+[![Get it on Google Play](https://img.shields.io/badge/Google%20Play-Download-2ea3f2?logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=dk.nicsilver.pcio)
+
 Turn your Android phone into a wireless mouse and keyboard for your PC over your local network.
 
 PCIO has two parts that talk to each other over Wi-Fi:
@@ -12,7 +14,7 @@ The app finds the server automatically on your network, so there is no IP addres
 ## Download
 
 - **PC server:** grab the latest `PCIO_Server.zip` from the [Releases page](https://github.com/Nicsilver/PCIO/releases/latest) and unzip it anywhere.
-- **Android app:** [Google Play listing](https://play.google.com/store/apps/details?id=dk.nicsilver.pcio) *(link becomes live again once the updated build is published)*, or build the APK yourself (see below).
+- **Android app:** [get it on Google Play](https://play.google.com/store/apps/details?id=dk.nicsilver.pcio), or build the APK yourself (see below).
 
 ## Getting started
 
