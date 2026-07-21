@@ -1,4 +1,4 @@
-name: Build & Release APK + AAB
+name: Build & Release APK + AAB + Server
 
 on:
   push:
@@ -45,6 +45,20 @@ jobs:
         working-directory: PCIO_App
         run: ./gradlew assembleRelease bundleRelease
 
+      # Mirrors PCIO_Server/build.xml's `dist` target with plain javac/jar so no Ant
+      # dependency is needed: compile, fold the images/ resources into the jar root
+      # (TrayIconHelper loads them via getResource("images/...")), set Main-Class.
+      - name: Build PCIO server zip
+        working-directory: PCIO_Server
+        run: |
+          mkdir -p build dist
+          find src/main/java -name '*.java' > sources.txt
+          javac -d build @sources.txt
+          cp -r src/main/resources/. build/
+          jar --create --file dist/PCIO_Server.jar --main-class dk.nicsilver.pcioServer.Main -C build .
+          printf '@echo off\r\njava -jar PCIO_Server.jar\r\npause\r\n' > dist/StartServer.bat
+          (cd dist && zip -r ../PCIO_Server.zip PCIO_Server.jar StartServer.bat)
+
       # Only when a tag is pushed; workflow_dispatch just builds (a signing smoke-test).
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -52,6 +66,7 @@ jobs:
         with:
           files: |
             PCIO_App/app/build/outputs/apk/release/app-release.apk
+            PCIO_Server/PCIO_Server.zip
           generate_release_notes: true
 
       # Skipped until PLAY_SERVICE_ACCOUNT_JSON exists and the SA has release access to dk.nicsilver.pcio.
