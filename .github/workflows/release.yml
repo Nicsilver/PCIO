@@ -1,0 +1,66 @@
+name: Build & Release APK + AAB
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Empty until the Play service-account secret is added; the publish step is skipped while empty.
+      PLAY_SA_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Decode keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > PCIO_App/upload-keystore.jks
+
+      - name: Write signing config
+        working-directory: PCIO_App
+        run: |
+          cat > keystore.properties <<EOF
+          storeFile=upload-keystore.jks
+          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          EOF
+
+      - name: Make gradlew executable
+        run: chmod +x PCIO_App/gradlew
+
+      - name: Build release APK + AAB
+        working-directory: PCIO_App
+        run: ./gradlew assembleRelease bundleRelease
+
+      # Only when a tag is pushed; workflow_dispatch just builds (a signing smoke-test).
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            PCIO_App/app/build/outputs/apk/release/app-release.apk
+          generate_release_notes: true
+
+      # Skipped until PLAY_SERVICE_ACCOUNT_JSON exists and the SA has release access to dk.nicsilver.pcio.
+      - name: Publish AAB to Google Play (production)
+        if: startsWith(github.ref, 'refs/tags/') && env.PLAY_SA_JSON != ''
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ env.PLAY_SA_JSON }}
+          packageName: dk.nicsilver.pcio
+          releaseFiles: PCIO_App/app/build/outputs/bundle/release/app-release.aab
+          tracks: production
+          status: completed
